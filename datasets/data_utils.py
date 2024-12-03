@@ -1,44 +1,69 @@
 import torch
-from datasets.lrs3_dataset import get_datasets_LRS3
-from datasets.mead_dataset import get_datasets_MEAD
-from datasets.mead_sides_dataset import get_datasets_MEAD_sides
-from datasets.ffhq_dataset import get_datasets_FFHQ
-from datasets.celeba_dataset import get_datasets_CelebA
+#from datasets.lrs3_dataset import get_datasets_LRS3
+#from datasets.mead_dataset import get_datasets_MEAD
+#from datasets.mead_sides_dataset import get_datasets_MEAD_sides
+#from datasets.ffhq_dataset import get_datasets_FFHQ
+#from datasets.celeba_dataset import get_datasets_CelebA
 from datasets.mixed_dataset_sampler import MixedDatasetBatchSampler
+from datasets.expression_dataset import get_datasets_Expressions, get_datasets_Expressions_val
+from datasets.emotion_dataset import get_datasets_Emotions
+from datasets.LFW_dataset import get_datasets_LFW
+from datasets.UTK_dataset import get_datasets_UTK
 import os
 
 
 def load_dataloaders(config):
 
     # ----------------------- initialize datasets ----------------------- #
-    train_dataset_LRS3, val_dataset_LRS3, test_dataset_LRS3 = get_datasets_LRS3(config)
-    train_dataset_MEAD, val_dataset_MEAD, test_dataset_MEAD = get_datasets_MEAD(config)
-    train_dataset_MEAD_sides, val_dataset_MEAD_sides, test_dataset_MEAD_sides = get_datasets_MEAD_sides(config)
-    train_dataset_ffhq = get_datasets_FFHQ(config)
-    train_dataset_celeba = get_datasets_CelebA(config)
+    train_dataset_Expressions = get_datasets_Expressions(config)
+    train_dataset_Emotions = get_datasets_Emotions(config)
+    train_dataset_LFW = get_datasets_LFW(config)
+    train_dataset_UTK = get_datasets_UTK(config)
+    
+    val_dataset_Expressions = get_datasets_Expressions_val(config)
+    
+    #train_dataset_LRS3, val_dataset_LRS3, test_dataset_LRS3 = get_datasets_LRS3(config)
+    #train_dataset_MEAD, val_dataset_MEAD, test_dataset_MEAD = get_datasets_MEAD(config)
+    #train_dataset_MEAD_sides, val_dataset_MEAD_sides, test_dataset_MEAD_sides = get_datasets_MEAD_sides(config)
+    #train_dataset_ffhq = get_datasets_FFHQ(config)
+    #train_dataset_celeba = get_datasets_CelebA(config)
 
     
     dataset_percentages = {
-        'LRS3': config.dataset.LRS3_percentage,
-        'MEAD': config.dataset.MEAD_percentage,
-        'FFHQ': config.dataset.FFHQ_percentage,
-        'CELEBA': config.dataset.CelebA_percentage,
-        'MEAD_sides': config.dataset.MEAD_sides_percentage
+    
+        'Expressions': config.dataset.Expression_percentage,
+        'Emotions': config.dataset.Emotion_percentage,
+        'LFW': config.dataset.LFW_percentage,
+        'UTK': config.dataset.UTK_percentage
+    
+        #'LRS3': config.dataset.LRS3_percentage,
+        #'MEAD': config.dataset.MEAD_percentage,
+        #'FFHQ': config.dataset.FFHQ_percentage,
+        #'CELEBA': config.dataset.CelebA_percentage,
+        #'MEAD_sides': config.dataset.MEAD_sides_percentage
     }
 
     
-    train_dataset = torch.utils.data.ConcatDataset([train_dataset_LRS3, 
-                                                    train_dataset_MEAD, 
-                                                    train_dataset_ffhq, 
-                                                    train_dataset_celeba,
-                                                    train_dataset_MEAD_sides, 
+    train_dataset = torch.utils.data.ConcatDataset([#train_dataset_LRS3, 
+                                                    #train_dataset_MEAD, 
+                                                    #train_dataset_ffhq, 
+                                                    #train_dataset_celeba,
+                                                    #train_dataset_MEAD_sides, 
+                                                    train_dataset_Expressions, 
+                                                    train_dataset_Emotions, 
+                                                    train_dataset_LFW, 
+                                                    train_dataset_UTK
                                                     ])
     
-    sampler = MixedDatasetBatchSampler([len(train_dataset_LRS3),
-                                        len(train_dataset_MEAD), 
-                                        len(train_dataset_ffhq), 
-                                        len(train_dataset_celeba),
-                                        len(train_dataset_MEAD_sides)
+    sampler = MixedDatasetBatchSampler([#len(train_dataset_LRS3),
+                                        #len(train_dataset_MEAD), 
+                                        #len(train_dataset_ffhq), 
+                                        #len(train_dataset_celeba),
+                                        #len(train_dataset_MEAD_sides)
+                                        len(train_dataset_Expressions),
+                                        len(train_dataset_Emotions),
+                                        len(train_dataset_LFW),
+                                        len(train_dataset_UTK)
                                         ], 
                                        list(dataset_percentages.values()), 
                                        config.train.batch_size, config.train.samples_per_epoch)
@@ -49,7 +74,7 @@ def load_dataloaders(config):
         return torch.utils.data.dataloader.default_collate(batch)
         
     
-    val_dataset = torch.utils.data.ConcatDataset([val_dataset_LRS3, val_dataset_MEAD])
+    val_dataset = torch.utils.data.ConcatDataset([val_dataset_Expressions])
                                              
     train_loader = torch.utils.data.DataLoader(train_dataset, batch_sampler=sampler, num_workers=config.train.num_workers, collate_fn=collate_fn)
     

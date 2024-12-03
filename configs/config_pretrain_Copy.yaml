@@ -59,8 +59,11 @@ render:
   
 
 dataset:
-    Expression_Recognition_path: datasets/image_datasets/Face_expression_recognition/images
-    Expression_Recognition_mediapipe_landmarks_path: dataset/image_datasets/Face_expression_recognition/mediapipe_landmarks
+    Expression_Recognition_path: datasets/image_datasets/Face_expression_recognition/images/images/train
+    Expression_Recognition_mediapipe_landmarks_path: dataset/image_datasets/Face_expression_recognition/mediapipe_landmarks/images/train
+    
+    Expression_Recognition_val_path: datasets/image_datasets/Face_expression_recognition/images/images/validation
+    Expression_Recognition_val_mediapipe_landmarks_path: dataset/image_datasets/Face_expression_recognition/mediapipe_landmarks/images/validation
     
     Emotion_Recognition_path: datasets/image_datasets/Facial_emotion_recognition/images
     Emotion_Recognition_mediapipe_landmarks_path: dataset/image_datasets/Facial_emotion_recognition/mediapipe_landmarks
@@ -70,6 +73,8 @@ dataset:
     
     UTKFace_path: datasets/image_datasets/UTKFace/part1
     UTKFace_mediapipe_landmarks_path: dataset/image_datasets/UTKFace/mediapipe_landmarks
+    
+    mediapipe: mediapipe
     
     Expression_percentage: 0.2
     Emotion_percentage: 0.2
@@ -103,4 +108,5 @@ dataset:
 #  CelebA_percentage: 0.3 #0.2
 #  MEAD_sides_percentage: 0.1 #0.1
 #  sample_full_video_for_testing: False
+
 

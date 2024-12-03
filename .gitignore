@@ -10,3 +10,5 @@ assets/LRS3_lists.pkl
 assets/MEAD_lists.pkl
 .vscode
 __pycache__/
+mediapipe/
+datasets/image_datasets/

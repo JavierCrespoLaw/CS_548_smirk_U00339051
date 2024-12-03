@@ -62,9 +62,7 @@ class Renderer(nn.Module):
         # shape colors, for rendering shape overlay
         colors = torch.tensor([180, 180, 180])[None, None, :].repeat(1, faces.max()+1, 1).float()/255.
 
-        flame_masks = pickle.load(
-            open('assets/FLAME_masks/FLAME_masks.pkl', 'rb'),
-            encoding='latin1')
+        flame_masks = pickle.load( open('assets/FLAME_masks/FLAME_masks.pkl', 'rb'), encoding='latin1')
         self.flame_masks = flame_masks
 
         if not render_full_head:

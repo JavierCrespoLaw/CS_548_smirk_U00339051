@@ -27,6 +27,35 @@ SMIRK reconstructs 3D faces from monocular images with facial geometry that fait
 </p>
 
 
+## CS 548 Final Presentation Branch
+
+This branch was made for a class project for CS 548 at SUNY Polytechnic Institute. 
+
+Team members: Javier Crespo-Law
+
+Run in a linux environment, and create a conda environment with python 3.9
+to install all the dependencies:
+pip install -r requirements.txt
+pip install --no-index --no-cache-dir pytorch3d -f https://dl.fbaipublicfiles.com/pytorch3d/packaging/wheels/py39_cu117_pyt201/download.html
+bash quick_install.sh
+
+Datasets used: 
+https://www.kaggle.com/datasets/tapakah68/facial-emotion-recognition
+https://www.kaggle.com/datasets/jonathanoheix/face-expression-recognition-dataset/data
+https://www.kaggle.com/datasets/atulanandjha/lfwpeople
+https://susanqq.github.io/UTKFace/
+
+Download and unzip each of these datasets into the datasets/image_datasets folder, then use 
+python datasets/preprocess_scripts/apply_mediapipe_to_dataset.py --input_dir PATH/images --output_dir PATH/mediapipe_landmarks
+python datasets/preprocess_scripts/apply_fan_to_dataset.py --input_dir PATH/images --output_dir PATH/fan_landmarks
+to generate the landmarks. 
+
+Afterwords, run
+python train.py configs/config_pretrain_Copy.yaml train.log_path="logs/pretrain"
+to begin pretraining, and if that is successful, run
+python train.py configs/config_train.yaml resume=logs/pretrain/first_stage_pretrained_encoder.pt train.loss_weights.emotion_loss=1.0
+to start training. 
+
 ## Installation
 You need to have a working version of PyTorch and Pytorch3D installed. We provide a `requirements.txt` file that can be used to install the necessary dependencies for a Python 3.9 setup with CUDA 11.7:
 
